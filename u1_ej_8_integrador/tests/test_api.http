@@ -1,0 +1,299 @@
+@baseUrl = http://127.0.0.1:8000
+
+### ==========================================
+### MÓDULO: CATEGORÍAS
+### ==========================================
+
+### 1. Crear Categoría
+POST {{baseUrl}}/categorias/
+Content-Type: application/json
+
+{
+  "codigo": "MUE-01",
+  "descripcion": "Muebles de Oficina",
+  "activo": true
+}
+
+###
+
+### 2. Crear Segunda Categoría
+POST {{baseUrl}}/categorias/
+Content-Type: application/json
+
+{
+  "codigo": "ELE-02",
+  "descripcion": "Electrónica",
+  "activo": true
+}
+
+###
+
+### 3. Listar Categorías
+GET {{baseUrl}}/categorias/
+
+###
+
+### 4. Detalle de Categoría
+GET {{baseUrl}}/categorias/1
+
+###
+
+### 5. Actualizar Categoría (Reemplazo Total)
+PUT {{baseUrl}}/categorias/1
+Content-Type: application/json
+
+{
+  "codigo": "MUE-01",
+  "descripcion": "Muebles de Oficina y Hogar",
+  "activo": true
+}
+
+###
+
+### 6. Desactivar Categoría (Borrado Lógico)
+PUT {{baseUrl}}/categorias/2/desactivar
+
+###
+
+### 7. Categoría Inexistente (404)
+GET {{baseUrl}}/categorias/999
+
+###
+
+### 8. Categoría con Código Inválido (422)
+POST {{baseUrl}}/categorias/
+Content-Type: application/json
+
+{
+  "codigo": "INVALIDO",
+  "descripcion": "No cumple el patrón",
+  "activo": true
+}
+
+###
+
+
+### ==========================================
+### MÓDULO: PRODUCTOS
+### ==========================================
+
+### 9. Crear Producto
+POST {{baseUrl}}/productos/
+Content-Type: application/json
+
+{
+  "nombre": "Silla Ergonómica",
+  "categoria": "MUE-01",
+  "precio": 250.00,
+  "stock": 10,
+  "stock_minimo": 5,
+  "activo": true
+}
+
+###
+
+### 10. Crear Producto con Stock Bajo
+POST {{baseUrl}}/productos/
+Content-Type: application/json
+
+{
+  "nombre": "Teclado Mecánico",
+  "categoria": "ELE-02",
+  "precio": 89.99,
+  "stock": 2,
+  "stock_minimo": 5,
+  "activo": true
+}
+
+###
+
+### 11. Listar Productos (con paginación)
+GET {{baseUrl}}/productos/?skip=0&limit=5
+
+###
+
+### 12. Detalle de Producto
+GET {{baseUrl}}/productos/1
+
+###
+
+### 13. Actualizar Producto (Reemplazo Total)
+PUT {{baseUrl}}/productos/1
+Content-Type: application/json
+
+{
+  "nombre": "Silla Ergonómica Premium",
+  "categoria": "MUE-01",
+  "precio": 299.99,
+  "stock": 20,
+  "stock_minimo": 5,
+  "activo": true
+}
+
+###
+
+### 14. Consultar Stock (stock normal)
+GET {{baseUrl}}/productos/1/stock
+
+###
+
+### 15. Consultar Stock (bajo mínimo)
+GET {{baseUrl}}/productos/2/stock
+
+###
+
+### 16. Desactivar Producto (Borrado Lógico)
+PUT {{baseUrl}}/productos/2/desactivar
+
+###
+
+### 17. Producto Inexistente (404)
+GET {{baseUrl}}/productos/999
+
+###
+
+### 18. Producto con Datos Inválidos (422)
+POST {{baseUrl}}/productos/
+Content-Type: application/json
+
+{
+  "nombre": "Escritorio Roto",
+  "categoria": "MUEBLES",
+  "precio": -50.00,
+  "stock": 5,
+  "stock_minimo": 5,
+  "activo": true
+}
+
+###
+
+
+### ==========================================
+### MÓDULO: CLIENTES
+### ==========================================
+
+### 19. Crear Cliente VIP
+POST {{baseUrl}}/clientes/
+Content-Type: application/json
+
+{
+  "nombre": "Ana García",
+  "email": "ana@email.com",
+  "telefono": "+54 11 1234 5678",
+  "tipo_cliente": "VIP",
+  "gasto_total": 15000.00,
+  "activo": true
+}
+
+###
+
+### 20. Crear Cliente Regular
+POST {{baseUrl}}/clientes/
+Content-Type: application/json
+
+{
+  "nombre": "Carlos López",
+  "email": "carlos@email.com",
+  "telefono": "+54 11 9876 5432",
+  "tipo_cliente": "Regular",
+  "gasto_total": 800.00,
+  "activo": true
+}
+
+###
+
+### 21. Crear Cliente Mayorista
+POST {{baseUrl}}/clientes/
+Content-Type: application/json
+
+{
+  "nombre": "Distribuidora Norte SA",
+  "email": "distribuidora@norte.com",
+  "telefono": null,
+  "tipo_cliente": "Mayorista",
+  "gasto_total": 5000.00,
+  "activo": true
+}
+
+###
+
+### 22. Listar Clientes (todos)
+GET {{baseUrl}}/clientes/?skip=0&limit=10
+
+###
+
+### 23. Listar Clientes Filtrado por Tipo
+GET {{baseUrl}}/clientes/?tipo_cliente=VIP
+
+###
+
+### 24. Detalle de Cliente
+GET {{baseUrl}}/clientes/1
+
+###
+
+### 25. Actualizar Cliente
+PUT {{baseUrl}}/clientes/1
+Content-Type: application/json
+
+{
+  "nombre": "Ana García Actualizada",
+  "email": "ana.nueva@email.com",
+  "telefono": "+54 11 1111 2222",
+  "tipo_cliente": "VIP",
+  "gasto_total": 20000.00,
+  "activo": true
+}
+
+###
+
+### 26. Consultar Beneficios VIP (descuento 20% + 5% bonus por >10k)
+GET {{baseUrl}}/clientes/1/beneficios
+
+###
+
+### 27. Consultar Beneficios Regular
+GET {{baseUrl}}/clientes/2/beneficios
+
+###
+
+### 28. Consultar Beneficios Mayorista
+GET {{baseUrl}}/clientes/3/beneficios
+
+###
+
+### 29. Desactivar Cliente (Borrado Lógico)
+PUT {{baseUrl}}/clientes/2/desactivar
+
+###
+
+### 30. Cliente Inexistente (404)
+GET {{baseUrl}}/clientes/999
+
+###
+
+### 31. Cliente con Email Inválido (422)
+POST {{baseUrl}}/clientes/
+Content-Type: application/json
+
+{
+  "nombre": "Test Inválido",
+  "email": "no-es-un-email",
+  "tipo_cliente": "VIP",
+  "gasto_total": 0.0,
+  "activo": true
+}
+
+###
+
+### 32. Cliente con Tipo Inválido (422)
+POST {{baseUrl}}/clientes/
+Content-Type: application/json
+
+{
+  "nombre": "Test Inválido",
+  "email": "test@email.com",
+  "tipo_cliente": "Ejecutivo",
+  "gasto_total": 0.0,
+  "activo": true
+}
