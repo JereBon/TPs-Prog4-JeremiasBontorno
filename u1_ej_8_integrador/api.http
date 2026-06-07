@@ -1,0 +1,120 @@
+@baseUrl = http://127.0.0.1:8000
+
+### ==========================================
+### PRODUCTOS
+### ==========================================
+
+### Crear Producto
+POST {{baseUrl}}/productos/
+Content-Type: application/json
+
+{
+  "nombre": "Silla Ergonómica",
+  "categoria": "MUE-01",
+  "precio": 250.00,
+  "stock": 10,
+  "stock_minimo": 5,
+  "activo": true
+}
+
+###
+
+### Crear Segundo Producto
+POST {{baseUrl}}/productos/
+Content-Type: application/json
+
+{
+  "nombre": "Teclado Mecánico",
+  "categoria": "ELE-02",
+  "precio": 89.99,
+  "stock": 2,
+  "stock_minimo": 5,
+  "activo": true
+}
+
+###
+
+### Listar Productos
+GET {{baseUrl}}/productos/?skip=0&limit=10
+
+###
+
+### Detalle de Producto
+GET {{baseUrl}}/productos/1
+
+###
+
+### Actualizar Producto
+PUT {{baseUrl}}/productos/1
+Content-Type: application/json
+
+{
+  "nombre": "Silla Ergonómica Premium",
+  "categoria": "MUE-01",
+  "precio": 299.99,
+  "stock": 20,
+  "stock_minimo": 5,
+  "activo": true
+}
+
+###
+
+### Consultar Stock
+GET {{baseUrl}}/productos/1/stock
+
+###
+
+### Desactivar Producto
+PUT {{baseUrl}}/productos/2/desactivar
+
+###
+
+### Producto Inexistente (404)
+GET {{baseUrl}}/productos/999
+
+###
+
+
+### ==========================================
+### PRODUCTO CATEGORIAS
+### ==========================================
+
+### Asignar Categoría a Producto
+POST {{baseUrl}}/producto-categorias/
+Content-Type: application/json
+
+{
+  "producto_id": 1,
+  "categoria_id": 1
+}
+
+###
+
+### Asignar Segunda Categoría al mismo Producto
+POST {{baseUrl}}/producto-categorias/
+Content-Type: application/json
+
+{
+  "producto_id": 1,
+  "categoria_id": 2
+}
+
+###
+
+### Listar todas las relaciones
+GET {{baseUrl}}/producto-categorias/
+
+###
+
+### Listar categorías del Producto 1
+GET {{baseUrl}}/producto-categorias/producto/1
+
+###
+
+### Eliminar relación Producto 1 - Categoría 2
+DELETE {{baseUrl}}/producto-categorias/1/2
+
+###
+
+### Relación inexistente (404)
+DELETE {{baseUrl}}/producto-categorias/99/99
