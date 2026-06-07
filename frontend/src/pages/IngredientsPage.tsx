@@ -1,83 +1,81 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useReactTable, getCoreRowModel, flexRender, createColumnHelper } from '@tanstack/react-table';
-import { Producto, ProductoPayload } from '../types/producto';
+import { Ingrediente, IngredientePayload } from '../types/ingrediente';
 import {
-  getProductos,
-  createProducto,
-  updateProducto,
-  deleteProducto,
-} from '../services/productoService';
-import ProductModal from '../components/ProductModal';
+  getIngredientes,
+  createIngrediente,
+  updateIngrediente,
+  deleteIngrediente,
+} from '../services/ingredienteService';
+import IngredienteModal from '../components/IngredienteModal';
 
-const columnHelper = createColumnHelper<Producto>();
+const columnHelper = createColumnHelper<Ingrediente>();
 
-export default function ProductsPage() {
+export default function IngredientsPage() {
   const queryClient = useQueryClient();
-  const [productoEditando, setProductoEditando] = useState<Producto | null>(null);
+  const [ingredienteEditando, setIngredienteEditando] = useState<Ingrediente | null>(null);
   const [modalAbierto, setModalAbierto] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { data: productos = [] } = useQuery({
-    queryKey: ['productos'],
-    queryFn: getProductos,
+  const { data: ingredientes = [] } = useQuery({
+    queryKey: ['ingredientes'],
+    queryFn: getIngredientes,
   });
 
   const crearMutation = useMutation({
-    mutationFn: (data: ProductoPayload) => createProducto(data),
+    mutationFn: (data: IngredientePayload) => createIngrediente(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['productos'] });
+      queryClient.invalidateQueries({ queryKey: ['ingredientes'] });
       setModalAbierto(false);
-      setProductoEditando(null);
+      setIngredienteEditando(null);
       setError(null);
     },
-    onError: () => setError('Error al guardar el producto'),
+    onError: () => setError('Error al guardar el ingrediente'),
   });
 
   const actualizarMutation = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: ProductoPayload }) => updateProducto(id, data),
+    mutationFn: ({ id, data }: { id: number; data: Partial<IngredientePayload> }) =>
+      updateIngrediente(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['productos'] });
+      queryClient.invalidateQueries({ queryKey: ['ingredientes'] });
       setModalAbierto(false);
-      setProductoEditando(null);
+      setIngredienteEditando(null);
       setError(null);
     },
-    onError: () => setError('Error al guardar el producto'),
+    onError: () => setError('Error al guardar el ingrediente'),
   });
 
   const eliminarMutation = useMutation({
-    mutationFn: (id: number) => deleteProducto(id),
+    mutationFn: (id: number) => deleteIngrediente(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['productos'] });
+      queryClient.invalidateQueries({ queryKey: ['ingredientes'] });
       setError(null);
     },
-    onError: () => setError('Error al eliminar el producto'),
+    onError: () => setError('Error al eliminar el ingrediente'),
   });
 
-  function handleSubmit(data: ProductoPayload) {
-    if (productoEditando) {
-      actualizarMutation.mutate({ id: productoEditando.id, data });
+  function handleSubmit(data: IngredientePayload) {
+    if (ingredienteEditando) {
+      actualizarMutation.mutate({ id: ingredienteEditando.id, data });
     } else {
       crearMutation.mutate(data);
     }
   }
 
   function handleEliminar(id: number) {
-    if (!confirm('¿Eliminar este producto?')) return;
+    if (!confirm('¿Eliminar este ingrediente?')) return;
     eliminarMutation.mutate(id);
   }
 
   const columns = [
     columnHelper.accessor('nombre', { header: 'Nombre' }),
-    columnHelper.accessor('categoria', { header: 'Categoría' }),
-    columnHelper.accessor('precio', {
-      header: 'Precio',
-      cell: (info) => `$${info.getValue().toFixed(2)}`,
+    columnHelper.accessor('descripcion', {
+      header: 'Descripción',
+      cell: (info) => info.getValue() ?? '-',
     }),
-    columnHelper.accessor('stock', { header: 'Stock' }),
-    columnHelper.accessor('stock_minimo', { header: 'Stock mín.' }),
-    columnHelper.accessor('activo', {
-      header: 'Activo',
+    columnHelper.accessor('es_alergeno', {
+      header: 'Alérgeno',
       cell: (info) => (info.getValue() ? 'Sí' : 'No'),
     }),
     columnHelper.display({
@@ -86,7 +84,7 @@ export default function ProductsPage() {
       cell: ({ row }) => (
         <div className="flex gap-2">
           <button
-            onClick={() => { setProductoEditando(row.original); setModalAbierto(true); }}
+            onClick={() => { setIngredienteEditando(row.original); setModalAbierto(true); }}
             className="text-blue-600 hover:underline text-sm"
           >
             Editar
@@ -103,20 +101,20 @@ export default function ProductsPage() {
   ];
 
   const table = useReactTable({
-    data: productos,
+    data: ingredientes,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
   return (
-    <div className="max-w-5xl mx-auto mt-8 px-4">
+    <div className="max-w-4xl mx-auto mt-8 px-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Productos</h1>
+        <h1 className="text-2xl font-bold">Ingredientes</h1>
         <button
           onClick={() => setModalAbierto(true)}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
-          Nuevo producto
+          Nuevo ingrediente
         </button>
       </div>
 
@@ -140,7 +138,7 @@ export default function ProductsPage() {
           {table.getRowModel().rows.length === 0 ? (
             <tr>
               <td colSpan={columns.length} className="text-center py-6 text-gray-500">
-                No hay productos registrados
+                No hay ingredientes registrados
               </td>
             </tr>
           ) : (
@@ -157,11 +155,11 @@ export default function ProductsPage() {
         </tbody>
       </table>
 
-      <ProductModal
+      <IngredienteModal
         abierto={modalAbierto}
-        productoEditando={productoEditando}
+        ingredienteEditando={ingredienteEditando}
         onSubmit={handleSubmit}
-        onCerrar={() => { setModalAbierto(false); setProductoEditando(null); }}
+        onCerrar={() => { setModalAbierto(false); setIngredienteEditando(null); }}
       />
     </div>
   );
