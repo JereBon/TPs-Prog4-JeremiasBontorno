@@ -47,3 +47,10 @@ def borrado_logico(id: int = Path(..., gt=0), session: Session = Depends(get_ses
     if not desactivada:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Categoría no encontrada")
     return desactivada
+
+
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def eliminar_categoria(id: int = Path(..., gt=0), session: Session = Depends(get_session)):
+    eliminada = services.eliminar(id, session)
+    if not eliminada:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Categoría no encontrada")

@@ -46,3 +46,12 @@ def desactivar(id: int, session: Session) -> Optional[CategoriaRead]:
     session.commit()
     session.refresh(categoria)
     return CategoriaRead.model_validate(categoria)
+
+
+def eliminar(id: int, session: Session) -> bool:
+    categoria = session.get(Categoria, id)
+    if not categoria:
+        return False
+    session.delete(categoria)
+    session.commit()
+    return True
