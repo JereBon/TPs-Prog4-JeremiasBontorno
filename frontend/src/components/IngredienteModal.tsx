@@ -1,22 +1,26 @@
 import { useForm } from '@tanstack/react-form';
-import { Categoria, CategoriaPayload } from '../types/categoria';
+import { Ingrediente, IngredientePayload } from '../types/ingrediente';
 
 interface Props {
   abierto: boolean;
-  categoriaEditando: Categoria | null;
-  onSubmit: (data: CategoriaPayload) => void;
+  ingredienteEditando: Ingrediente | null;
+  onSubmit: (data: IngredientePayload) => void;
   onCerrar: () => void;
 }
 
-export default function CategoriaModal({ abierto, categoriaEditando, onSubmit, onCerrar }: Props) {
+export default function IngredienteModal({ abierto, ingredienteEditando, onSubmit, onCerrar }: Props) {
   const form = useForm({
     defaultValues: {
-      codigo: categoriaEditando?.codigo ?? '',
-      descripcion: categoriaEditando?.descripcion ?? '',
-      activo: categoriaEditando?.activo ?? true,
+      nombre: ingredienteEditando?.nombre ?? '',
+      descripcion: ingredienteEditando?.descripcion ?? '',
+      es_alergeno: ingredienteEditando?.es_alergeno ?? false,
     },
     onSubmit: async ({ value }) => {
-      onSubmit(value);
+      onSubmit({
+        nombre: value.nombre,
+        descripcion: value.descripcion || null,
+        es_alergeno: value.es_alergeno,
+      });
     },
   });
 
@@ -26,7 +30,7 @@ export default function CategoriaModal({ abierto, categoriaEditando, onSubmit, o
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
         <h2 className="text-xl font-bold mb-4">
-          {categoriaEditando ? 'Editar Categoría' : 'Nueva Categoría'}
+          {ingredienteEditando ? 'Editar Ingrediente' : 'Nuevo Ingrediente'}
         </h2>
         <form
           onSubmit={(e) => {
@@ -34,15 +38,14 @@ export default function CategoriaModal({ abierto, categoriaEditando, onSubmit, o
             form.handleSubmit();
           }}
         >
-          <form.Field name="codigo">
+          <form.Field name="nombre">
             {(field) => (
               <div className="mb-4">
-                <label className="block text-sm font-semibold mb-1">Código (ej: MUE-01)</label>
+                <label className="block text-sm font-semibold mb-1">Nombre</label>
                 <input
                   type="text"
                   value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value.toUpperCase())}
-                  placeholder="MUE-01"
+                  onChange={(e) => field.handleChange(e.target.value)}
                   required
                   className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
                 />
@@ -56,27 +59,25 @@ export default function CategoriaModal({ abierto, categoriaEditando, onSubmit, o
                 <label className="block text-sm font-semibold mb-1">Descripción</label>
                 <input
                   type="text"
-                  value={field.state.value}
+                  value={field.state.value ?? ''}
                   onChange={(e) => field.handleChange(e.target.value)}
-                  placeholder="Descripción de la categoría"
-                  required
                   className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
                 />
               </div>
             )}
           </form.Field>
 
-          <form.Field name="activo">
+          <form.Field name="es_alergeno">
             {(field) => (
               <div className="mb-6 flex items-center gap-2">
                 <input
                   type="checkbox"
-                  id="activo"
+                  id="es_alergeno"
                   checked={field.state.value}
                   onChange={(e) => field.handleChange(e.target.checked)}
                   className="w-4 h-4"
                 />
-                <label htmlFor="activo" className="text-sm">Activo</label>
+                <label htmlFor="es_alergeno" className="text-sm">Es alérgeno</label>
               </div>
             )}
           </form.Field>
@@ -86,7 +87,7 @@ export default function CategoriaModal({ abierto, categoriaEditando, onSubmit, o
               type="submit"
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
             >
-              {categoriaEditando ? 'Actualizar' : 'Crear'}
+              {ingredienteEditando ? 'Actualizar' : 'Crear'}
             </button>
             <button
               type="button"

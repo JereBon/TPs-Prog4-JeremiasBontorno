@@ -6,6 +6,7 @@ export default function Navbar() {
       <span className="font-bold text-lg">Gestor de Productos</span>
       <Link to="/categorias" className="hover:text-blue-200">Categorías</Link>
       <Link to="/productos" className="hover:text-blue-200">Productos</Link>
+      <Link to="/ingredientes" className="hover:text-blue-200">Ingredientes</Link>
     </nav>
   );
 }

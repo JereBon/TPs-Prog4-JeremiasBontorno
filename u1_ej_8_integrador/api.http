@@ -118,3 +118,127 @@ DELETE {{baseUrl}}/producto-categorias/1/2
 
 ### Relación inexistente (404)
 DELETE {{baseUrl}}/producto-categorias/99/99
+
+###
+
+
+### ==========================================
+### INGREDIENTES
+### ==========================================
+
+### Crear Ingrediente
+POST {{baseUrl}}/ingredientes/
+Content-Type: application/json
+
+{
+  "nombre": "Harina",
+  "descripcion": "Harina de trigo 000",
+  "es_alergeno": false
+}
+
+###
+
+### Crear Ingrediente Alérgeno
+POST {{baseUrl}}/ingredientes/
+Content-Type: application/json
+
+{
+  "nombre": "Maní",
+  "descripcion": "Maní tostado",
+  "es_alergeno": true
+}
+
+###
+
+### Listar Ingredientes
+GET {{baseUrl}}/ingredientes/
+
+###
+
+### Detalle de Ingrediente
+GET {{baseUrl}}/ingredientes/1
+
+###
+
+### Actualizar Ingrediente
+PUT {{baseUrl}}/ingredientes/1
+Content-Type: application/json
+
+{
+  "descripcion": "Harina de trigo 0000 extra fina"
+}
+
+###
+
+### Eliminar Ingrediente
+DELETE {{baseUrl}}/ingredientes/1
+
+###
+
+### Ingrediente Inexistente (404)
+GET {{baseUrl}}/ingredientes/999
+
+###
+
+
+### ==========================================
+### PEDIDOS
+### ==========================================
+
+### Crear Pedido
+POST {{baseUrl}}/pedidos/
+Content-Type: application/json
+
+{
+  "estado": "pendiente",
+  "total": 339.99,
+  "detalles": [
+    {
+      "producto_id": 1,
+      "cantidad": 1,
+      "precio_snapshot": 250.00,
+      "nombre_snapshot": "Silla Ergonómica"
+    },
+    {
+      "producto_id": 2,
+      "cantidad": 1,
+      "precio_snapshot": 89.99,
+      "nombre_snapshot": "Teclado Mecánico"
+    }
+  ]
+}
+
+###
+
+### Listar Pedidos
+GET {{baseUrl}}/pedidos/
+
+###
+
+### Detalle de Pedido
+GET {{baseUrl}}/pedidos/1
+
+###
+
+### Detalles del Pedido 1
+GET {{baseUrl}}/pedidos/1/detalles
+
+###
+
+### Actualizar Estado de Pedido
+PUT {{baseUrl}}/pedidos/1
+Content-Type: application/json
+
+{
+  "estado": "confirmado"
+}
+
+###
+
+### Eliminar Pedido
+DELETE {{baseUrl}}/pedidos/1
+
+###
+
+### Pedido Inexistente (404)
+GET {{baseUrl}}/pedidos/999
