@@ -1,0 +1,69 @@
+@baseUrl = http://127.0.0.1:8000
+
+### Crear Producto
+POST {{baseUrl}}/productos/
+Content-Type: application/json
+
+{
+  "nombre": "Silla Ergonómica",
+  "categoria": "MUE-01",
+  "precio": 250.00,
+  "stock": 10,
+  "stock_minimo": 5,
+  "activo": true
+}
+
+###
+
+### Crear Producto con Stock Bajo
+POST {{baseUrl}}/productos/
+Content-Type: application/json
+
+{
+  "nombre": "Teclado Mecánico",
+  "categoria": "ELE-02",
+  "precio": 89.99,
+  "stock": 2,
+  "stock_minimo": 5,
+  "activo": true
+}
+
+###
+
+### Listar Productos
+GET {{baseUrl}}/productos/?skip=0&limit=10
+
+###
+
+### Detalle de Producto
+GET {{baseUrl}}/productos/1
+
+###
+
+### Actualizar Producto
+PUT {{baseUrl}}/productos/1
+Content-Type: application/json
+
+{
+  "nombre": "Silla Ergonómica Premium",
+  "categoria": "MUE-01",
+  "precio": 299.99,
+  "stock": 20,
+  "stock_minimo": 5,
+  "activo": true
+}
+
+###
+
+### Consultar Stock
+GET {{baseUrl}}/productos/1/stock
+
+###
+
+### Desactivar Producto
+PUT {{baseUrl}}/productos/2/desactivar
+
+###
+
+### Producto Inexistente
+GET {{baseUrl}}/productos/999

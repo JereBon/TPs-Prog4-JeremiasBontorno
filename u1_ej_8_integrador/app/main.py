@@ -1,10 +1,10 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.database import create_db_and_tables
 from app.modules.producto.routers import router as producto_router
 from app.modules.categoria.routers import router as categoria_router
 from app.modules.clientes.routers import router as clientes_router
 
-# Importar modelos para que SQLModel los registre antes de create_all
 import app.modules.categoria.models  # noqa: F401
 import app.modules.producto.models   # noqa: F401
 import app.modules.clientes.models   # noqa: F401
@@ -12,9 +12,16 @@ import app.modules.clientes.models   # noqa: F401
 
 def create_app() -> FastAPI:
     app = FastAPI(
-        title="Gestor de Productos - TP2",
-        description="Migración a PostgreSQL con SQLModel. Arquitectura: Router → Service → Schema → Model.",
-        version="2.0.0",
+        title="Gestor de Productos - TP3",
+        version="3.0.0",
+    )
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["http://localhost:5173"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
 
     @app.on_event("startup")
