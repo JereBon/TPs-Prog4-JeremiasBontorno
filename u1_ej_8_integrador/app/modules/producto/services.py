@@ -48,6 +48,15 @@ def desactivar(id: int, session: Session) -> Optional[ProductoRead]:
     return ProductoRead.model_validate(producto)
 
 
+def eliminar(id: int, session: Session) -> bool:
+    producto = session.get(Producto, id)
+    if not producto:
+        return False
+    session.delete(producto)
+    session.commit()
+    return True
+
+
 def obtener_estado_stock(id: int, session: Session) -> Optional[dict]:
     producto = session.get(Producto, id)
     if not producto:

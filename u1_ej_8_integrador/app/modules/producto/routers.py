@@ -49,6 +49,12 @@ def borrado_logico(id: int = Path(..., gt=0), session: Session = Depends(get_ses
     return desactivado
 
 
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def eliminar_producto(id: int = Path(..., gt=0), session: Session = Depends(get_session)):
+    if not services.eliminar(id, session):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Producto no encontrado")
+
+
 @router.get("/{id}/stock", response_model=schemas.ProductoStockResponse, status_code=status.HTTP_200_OK)
 def consultar_stock(id: int = Path(..., gt=0), session: Session = Depends(get_session)):
     resultado = services.obtener_estado_stock(id, session)
